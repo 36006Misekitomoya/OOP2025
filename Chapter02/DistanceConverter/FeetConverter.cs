@@ -10,18 +10,18 @@ namespace DistanceConverter
        
         
        //定数
-        private const double ratio = 0.3048;
+        private const double inch = 0.0254;
 
 
 
         //メートルからフィートを求める
         public static double FromMeter(double meter) {
-            return meter / ratio;
+            return meter / inch;
         }
 
         //フィートからメートルを求める
         public static double ToMeter(double feet) {
-            return feet * ratio;
+            return feet * inch;
         }
 
 
