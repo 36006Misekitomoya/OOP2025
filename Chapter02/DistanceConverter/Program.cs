@@ -17,18 +17,16 @@ namespace DistanceConverter {
             static void PrintFeetToMeterList(int start, int end) {
                 //フィートからメートル
                 for (int feet = start; feet <= end; feet++) {
-                    // double meter = feet * 0.3048;
-                    FeetConverter fc = new FeetConverter();
-                    double meter = fc.ToMeter(feet);
+                    // double meter = feet * 0.3048;                    
+                    double meter = FeetConverter.ToMeter(feet);
                     Console.WriteLine($"{feet}ft = {meter:0.0000}m");
                 }
             }
             static void PrintMeterToFeetList(int start, int end) {
                 //メートルからフィート]
-                FeetConverter fc = new FeetConverter();
                 for (int meter = start; meter <= end; meter++) {
                     // double meter = feet * 0.3048
-                    double feet = fc.FromMeter(meter);
+                    double feet = FeetConverter.FromMeter(meter);
                     Console.WriteLine($"{meter}m = {feet:0.0000}ft");
                 }
             }
