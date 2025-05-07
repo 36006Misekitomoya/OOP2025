@@ -10,12 +10,12 @@
             if (a == 1) {
                 Console.Write("変換前(ヤード):");
                 int start = int.Parse(Console.ReadLine());
-                Console.Write("変換後(ヤード):" + YardToMeter);
+                Console.Write("変換後(ヤード):" + YardToMeter(int yard));
                
             } else if(a == 2) {
                 Console.Write("変換前(メートル):");
                 int start = int.Parse(Console.ReadLine());
-                Console.Write("変換後(メートル):" + MeterToYard);
+                Console.Write("変換後(メートル):" + MeterToYard(int meter));
                
                
             } else {
