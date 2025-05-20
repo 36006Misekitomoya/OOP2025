@@ -43,7 +43,11 @@ namespace Exercise02 {
         }
 
         private static void Exercise2_3(List<string> names) {
-
+            var query = names
+                .Where(s => s.Length <= 'o')
+                .Select(s => s.ToLower());
+            Console.WriteLine(query);
+                
         }
 
         private static void Exercise2_4(List<string> names) {
