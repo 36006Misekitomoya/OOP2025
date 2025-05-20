@@ -29,7 +29,7 @@ namespace Exercise02 {
             Console.WriteLine("都市名を入力。空行で終了。");
             do {
                
-                var name = Console.ReadLine();
+                var name = Console.ReadLine();//入力処理
                 if (string.IsNullOrEmpty(name))
                     break;
                 int index = names.FindIndex(s => s == name);
@@ -38,7 +38,8 @@ namespace Exercise02 {
         }
 
         private static void Exercise2_2(List<string> names) {
-
+            var count = names.Count(s => s.Contains('o'));
+            Console.WriteLine(count);
         }
 
         private static void Exercise2_3(List<string> names) {
