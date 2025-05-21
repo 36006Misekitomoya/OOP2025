@@ -28,13 +28,13 @@ namespace Exercise02 {
         private static void Exercise2_1(List<string> names) {
             Console.WriteLine("都市名を入力。空行で終了。");
             do {
-               
+
                 var name = Console.ReadLine();//入力処理
                 if (string.IsNullOrEmpty(name))
                     break;
                 int index = names.FindIndex(s => s == name);
                 Console.WriteLine();
-            }while (true) ;
+            } while (true);
         }
 
         private static void Exercise2_2(List<string> names) {
@@ -44,13 +44,22 @@ namespace Exercise02 {
 
         private static void Exercise2_3(List<string> names) {
             var query = names
-                .Where(s => s.Length <= 'o')
-                .Select(s => s.ToLower());
-            Console.WriteLine(query);
-                
+                .Where(s => s.Contains('o')).ToArray();
+            foreach (var item in query) {
+                Console.WriteLine(item);
+            }
+
         }
 
         private static void Exercise2_4(List<string> names) {
+            var obj = names
+                .Where(s => s.StartsWith('B'))
+                .Select(s => new { s, s.Length });
+            foreach (var data in obj) {
+                Console.WriteLine(data.s + ":" + data.Length + "文字");
+            }
+
+
 
         }
     }
