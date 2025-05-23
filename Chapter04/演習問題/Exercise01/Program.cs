@@ -22,15 +22,42 @@ namespace Exercise01 {
         }
 
         private static void Exercise1(List<string> langs) {
-           langs.ForEach = 
+            //foreach文
+            foreach (var s in langs) {
+                if (s.Contains("S"))
+                    Console.WriteLine(s);
+            }
+            Console.WriteLine();
+            //for文
+            for (var i = 0; i < langs.Count; i++) {
+                if (langs[i].Contains("S")) {
+                    Console.WriteLine(langs[i]);
+                }
+            }
+            Console.WriteLine();
+            //while文
+            int index = 0;
+            while (index < langs.Count) {
+                if (langs[index].Contains("S"))
+                    Console.WriteLine(langs[index]);
+                index++;
+
+            }
+
+
+
         }
 
         private static void Exercise2(List<string> langs) {
-            
+            var L = langs.Where(s => s.Contains("S"));
+            foreach (var lang in L) {
+                Console.WriteLine(lang);
+            }
         }
 
         private static void Exercise3(List<string> langs) {
-            
+            var s = langs.Find(s => s.Length == 10) ?? "unknown";
+            Console.WriteLine(s);
         }
     }
 }
