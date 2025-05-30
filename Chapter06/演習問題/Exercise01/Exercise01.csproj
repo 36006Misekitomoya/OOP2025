@@ -7,4 +7,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="Chapter07\Section01\Section01.csproj" />
+    <None Include="Chapter07\Section05\Section05.csproj" />
+    <None Include="Chapter07\演習問題\Exercise01\Exercise01.csproj" />
+    <None Include="Chapter07\演習問題\Exercise02\.vs\Exercise02\DesignTimeBuild\.dtbcache.v2" />
+    <None Include="Chapter07\演習問題\Exercise02\Exercise02.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Chapter07\演習問題\Exercise02\.vs\Exercise02\v17\" />
+  </ItemGroup>
+
 </Project>
