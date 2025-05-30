@@ -22,7 +22,7 @@ namespace Exercise03 {
         }
 
         private static void Exercise1(string text) {
-            var s = text.Count(s => s ==' ');
+            var s = text.Count(s => s == ' ');
             Console.WriteLine(s);
         }
 
@@ -32,15 +32,18 @@ namespace Exercise03 {
         }
 
         private static void Exercise3(string text) {
-           
+
         }
 
         private static void Exercise4(string text) {
-           
+            var s = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
+            Console.WriteLine(s);
         }
 
         private static void Exercise5(string text) {
-           
+            var s = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Where(s => s.Length <= 4 );
+            foreach(var aaa in s)
+            Console.WriteLine(aaa);
         }
     }
 }
