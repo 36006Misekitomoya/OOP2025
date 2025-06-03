@@ -1,5 +1,4 @@
 namespace Section01 {
-
     public class Book {
         public string Title { get; init; } = string.Empty;
         public int Price { get; init; }
