@@ -1,4 +1,5 @@
 ﻿
+using System.Runtime.CompilerServices;
 using System.Text;
 
 namespace Exercise03 {
@@ -59,12 +60,48 @@ namespace Exercise03 {
                 Console.WriteLine(aaa);
         }
         private static void Exercise6(string text) {
-            text.ToLower()
-                .Where(c => !char.IsWhiteSpace(c) && !char.IsPunctuation(c))
-                .GroupBy(c => c)
-                .OrderBy(g => g.Key)
-                .ToList()
-                .ForEach(g => Console.WriteLine($"{g.Key}: {g.Count()}"));
+            //text.ToLower()
+            //    .Where(c => !char.IsWhiteSpace(c) && !char.IsPunctuation(c))
+            //    .GroupBy(c => c)
+            //    .OrderBy(g => g.Key)
+            //    .ToList()
+            //    .ForEach(g => Console.WriteLine($"{g.Key}: {g.Count()}"));
+
+            var str = text.ToLower().Replace(" ","");
+
+            var alphDicCount = Enumerable.Range('a', 26)
+                .ToDictionary(num => ((char)num).ToString(), num => 0);
+
+            foreach (var alph in str) {
+                alphDicCount[alph.ToString()]++;
+            }
+            foreach(var item in alphDicCount) {
+                Console.WriteLine($"{item.Key}:{item.Value}");
+            }
+            Console.WriteLine();
+
+            //*************************************************//
+            //配列で集計
+            var array = Enumerable.Repeat(0, 26).ToArray();
+
+            foreach(var alph in str) {
+                array[alph - 'a']++;
+            }
+
+            for (char ch = 'a';ch <= 'z'; ch++) {
+                Console.WriteLine($"{ch}:{array[ch - 'a']}");
+            }
+
+            Console.WriteLine();
+            //*************************************************//
+            //'a'から順にカウントして出力
+            for (char ch = 'a';ch <= 'z'; ch++) {
+                Console.WriteLine($"{ch}:{text.Count(tc => tc == ch)}");
+            }
+
+
+
+
         }
     }
 }
