@@ -5,7 +5,7 @@ namespace Exercise03 {
     internal class Program {
         static void Main(string[] args) {
             var text = "Jackdaws love my big sphinx of quartz";
-
+            #region
             Console.WriteLine("6.3.1");
             Exercise1(text);
 
@@ -21,7 +21,12 @@ namespace Exercise03 {
             Console.WriteLine("6.3.5");
             Exercise5(text);
 
+            Console.WriteLine("6.3.99");
+            Exercise6(text);
+            #endregion
         }
+
+
 
         private static void Exercise1(string text) {
             var s = text.Count(s => s == ' ');
@@ -49,9 +54,23 @@ namespace Exercise03 {
         }
 
         private static void Exercise5(string text) {
-            var s = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Where(s => s.Length <= 4 );
-            foreach(var aaa in s)
-            Console.WriteLine(aaa);
+            var s = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Where(s => s.Length <= 4);
+            foreach (var aaa in s)
+                Console.WriteLine(aaa);
+        }
+        private static void Exercise6(string text) {
+            text.ToLower()
+                .Where(c => !char.IsWhiteSpace(c) && !char.IsPunctuation(c))
+                .GroupBy(c => c)
+                .OrderBy(g => g.Key)
+                .ToList()
+                .ForEach(g => Console.WriteLine($"{g.Key}: {g.Count()}"));
         }
     }
 }
+
+
+
+
+
+
