@@ -23,7 +23,7 @@ namespace DistanceConverter {
                 }
             }
             static void PrintMeterToFeetList(int start, int end) {
-                //メートルからフィート]
+                //メートルからフィート
                 for (int meter = start; meter <= end; meter++) {
                     // double meter = feet * 0.3048
                     double feet = FeetConverter.FromMeter(meter);
