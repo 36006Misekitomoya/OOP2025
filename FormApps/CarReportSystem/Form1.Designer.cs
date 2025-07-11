@@ -53,9 +53,26 @@ namespace CarReportSystem {
             vScrollBar1 = new VScrollBar();
             ofdPicFileOpen = new OpenFileDialog();
             btNewRecord = new Button();
+            ssMessageArea = new StatusStrip();
+            tsslbMessage = new ToolStripStatusLabel();
+            menuStrip1 = new MenuStrip();
+            toolStripMenuItem1 = new ToolStripMenuItem();
+            ファイルFToolStripMenuItem = new ToolStripMenuItem();
+            開くToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            tsmiSave = new ToolStripMenuItem();
+            toolStripSeparator2 = new ToolStripSeparator();
+            tsmiChangeColor = new ToolStripMenuItem();
+            toolStripSeparator3 = new ToolStripSeparator();
+            tsmiExit = new ToolStripMenuItem();
+            ヘルプHToolStripMenuItem = new ToolStripMenuItem();
+            tsmiAbout = new ToolStripMenuItem();
+            cbColor = new ColorDialog();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecord).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbPicture).BeginInit();
+            ssMessageArea.SuspendLayout();
+            menuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -136,7 +153,6 @@ namespace CarReportSystem {
             cbAuthor.Name = "cbAuthor";
             cbAuthor.Size = new Size(194, 38);
             cbAuthor.TabIndex = 1;
-
             // 
             // groupBox1
             // 
@@ -265,9 +281,10 @@ namespace CarReportSystem {
             dgvRecord.MultiSelect = false;
             dgvRecord.Name = "dgvRecord";
             dgvRecord.ReadOnly = true;
-            dgvRecord.Size = new Size(753, 255);
+            dgvRecord.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvRecord.Size = new Size(753, 185);
             dgvRecord.TabIndex = 5;
-            dgvRecord.Click += btRecordAdd_Click;
+            dgvRecord.Click += dgvRecord_Click;
             // 
             // btPicOpen
             // 
@@ -358,11 +375,105 @@ namespace CarReportSystem {
             btNewRecord.UseVisualStyleBackColor = true;
             btNewRecord.Click += btNewRecord_Click;
             // 
+            // ssMessageArea
+            // 
+            ssMessageArea.Items.AddRange(new ToolStripItem[] { tsslbMessage });
+            ssMessageArea.Location = new Point(0, 685);
+            ssMessageArea.Name = "ssMessageArea";
+            ssMessageArea.Size = new Size(1057, 22);
+            ssMessageArea.TabIndex = 10;
+            ssMessageArea.Text = "statusStrip1";
+            // 
+            // tsslbMessage
+            // 
+            tsslbMessage.Name = "tsslbMessage";
+            tsslbMessage.Size = new Size(0, 17);
+            // 
+            // menuStrip1
+            // 
+            menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, ファイルFToolStripMenuItem, ヘルプHToolStripMenuItem });
+            menuStrip1.Location = new Point(0, 0);
+            menuStrip1.Name = "menuStrip1";
+            menuStrip1.Size = new Size(1057, 24);
+            menuStrip1.TabIndex = 11;
+            menuStrip1.Text = "menuStrip1";
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(12, 20);
+            // 
+            // ファイルFToolStripMenuItem
+            // 
+            ファイルFToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { 開くToolStripMenuItem, toolStripSeparator1, tsmiSave, toolStripSeparator2, tsmiChangeColor, toolStripSeparator3, tsmiExit });
+            ファイルFToolStripMenuItem.Name = "ファイルFToolStripMenuItem";
+            ファイルFToolStripMenuItem.Size = new Size(67, 20);
+            ファイルFToolStripMenuItem.Text = "ファイル(&F)";
+            // 
+            // 開くToolStripMenuItem
+            // 
+            開くToolStripMenuItem.Name = "開くToolStripMenuItem";
+            開くToolStripMenuItem.Size = new Size(140, 22);
+            開くToolStripMenuItem.Text = "開く...";
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(137, 6);
+            // 
+            // tsmiSave
+            // 
+            tsmiSave.Name = "tsmiSave";
+            tsmiSave.Size = new Size(140, 22);
+            tsmiSave.Text = "保存...";
+            // 
+            // toolStripSeparator2
+            // 
+            toolStripSeparator2.Name = "toolStripSeparator2";
+            toolStripSeparator2.Size = new Size(137, 6);
+            // 
+            // tsmiChangeColor
+            // 
+            tsmiChangeColor.Name = "tsmiChangeColor";
+            tsmiChangeColor.Size = new Size(180, 22);
+            tsmiChangeColor.Text = "色設定...";
+            tsmiChangeColor.Click += tsmiChangeColor_Click;
+            // 
+            // toolStripSeparator3
+            // 
+            toolStripSeparator3.Name = "toolStripSeparator3";
+            toolStripSeparator3.Size = new Size(137, 6);
+            // 
+            // tsmiExit
+            // 
+            tsmiExit.Name = "tsmiExit";
+            tsmiExit.ShortcutKeys = Keys.Alt | Keys.F4;
+            tsmiExit.Size = new Size(140, 22);
+            tsmiExit.Text = "終了";
+            tsmiExit.Click += tsmiExit_Click;
+            // 
+            // ヘルプHToolStripMenuItem
+            // 
+            ヘルプHToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { tsmiAbout });
+            ヘルプHToolStripMenuItem.Name = "ヘルプHToolStripMenuItem";
+            ヘルプHToolStripMenuItem.Size = new Size(65, 20);
+            ヘルプHToolStripMenuItem.Text = "ヘルプ(&H)";
+            // 
+            // tsmiAbout
+            // 
+            tsmiAbout.Name = "tsmiAbout";
+            tsmiAbout.Size = new Size(180, 22);
+            tsmiAbout.Text = "このアプリについて...";
+            tsmiAbout.Click += tsmiAbout_Click;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1057, 765);
+            BackColor = Color.White;
+            ClientSize = new Size(1057, 707);
+            Controls.Add(ssMessageArea);
+            Controls.Add(menuStrip1);
             Controls.Add(btNewRecord);
             Controls.Add(vScrollBar1);
             Controls.Add(pbPicture);
@@ -384,12 +495,18 @@ namespace CarReportSystem {
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
+            MainMenuStrip = menuStrip1;
             Name = "Form1";
             Text = "試乗レポート管理システム";
+            Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvRecord).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbPicture).EndInit();
+            ssMessageArea.ResumeLayout(false);
+            ssMessageArea.PerformLayout();
+            menuStrip1.ResumeLayout(false);
+            menuStrip1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -429,5 +546,20 @@ namespace CarReportSystem {
         private VScrollBar vScrollBar1;
         private OpenFileDialog ofdPicFileOpen;
         private Button btNewRecord;
+        private StatusStrip ssMessageArea;
+        private ToolStripStatusLabel tsslbMessage;
+        private MenuStrip menuStrip1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem ファイルFToolStripMenuItem;
+        private ToolStripMenuItem 開くToolStripMenuItem;
+        private ToolStripMenuItem tsmiSave;
+        private ToolStripMenuItem ヘルプHToolStripMenuItem;
+        private ToolStripMenuItem tsmiAbout;
+        private ToolStripSeparator toolStripSeparator1;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripMenuItem tsmiChangeColor;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripMenuItem tsmiExit;
+        private ColorDialog cbColor;
     }
 }
