@@ -1,10 +1,15 @@
 using System.ComponentModel;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Windows.Forms;
 using static CarReportSystem.CarReport;
 
 namespace CarReportSystem {
     public partial class Form1 : Form {
         //カーレポート管理用リスト
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
+
+        //設定クラスのインスタンスを生成
+        Settings settings = new Settings();
 
         public Form1() {
             InitializeComponent();
@@ -16,51 +21,53 @@ namespace CarReportSystem {
                 pbPicture.Image = Image.FromFile(ofdPicFileOpen.FileName);
             }
         }
+
         private void btPicDelete_Click(object sender, EventArgs e) {
             pbPicture.Image = null;
         }
 
+        //記録者の履歴をコンボボックスへ登録（重複なし）
         private void setCbAuthor(string author) {
             if (!cbAuthor.Items.Contains(author)) {
+                //未登録なら登録【登録済みなら何もしない】
                 cbAuthor.Items.Add(author);
             }
         }
 
-        private void setCarName(string carName) {
+        //車名の履歴をコンボボックスへ登録（重複なし）
+        private void setCbCarName(string carName) {
             if (!cbCarName.Items.Contains(carName)) {
+                //未登録なら登録【登録済みなら何もしない】
                 cbCarName.Items.Add(carName);
             }
         }
 
-
-
         private void btRecordAdd_Click(object sender, EventArgs e) {
-            if (cbAuthor.Text == String.Empty || cbCarName.Text == String.Empty) {
-                tsslbMessage.Text = String.Empty;
 
+            tsslbMessage.Text = String.Empty;
+
+            if (cbAuthor.Text == String.Empty || cbCarName.Text == String.Empty) {
                 tsslbMessage.Text = "記録者、または車名が未入力です";
                 return;
             }
 
-
             var carReport = new CarReport {
                 Date = dtpDate.Value,
-                Auther = cbAuthor.Text,
+                Author = cbAuthor.Text,
                 Maker = getRadioButtonMaker(),
                 CarName = cbCarName.Text,
                 Report = tbReport.Text,
                 Picture = pbPicture.Image,
-
             };
             listCarReports.Add(carReport);
-            setCbAuthor(cbAuthor.Text);
-            setCarName(cbCarName.Text);
-            InputItemsAllClear();//登録後は項目をクリア
+            setCbAuthor(cbAuthor.Text); //コンボボックスへ登録
+            setCbCarName(cbCarName.Text);
+            InputItemsAllClear();   //登録後は項目をクリア
         }
 
         //入力項目をすべてクリア
         private void InputItemsAllClear() {
-            dtpDate.Value = DateTime.Now;
+            dtpDate.Value = DateTime.Today;
             cbAuthor.Text = string.Empty;
             rbOther.Checked = true;
             cbCarName.Text = string.Empty;
@@ -68,24 +75,23 @@ namespace CarReportSystem {
             pbPicture.Image = null;
         }
 
-        private CarReport.MakerGroup getRadioButtonMaker() {
+        private MakerGroup getRadioButtonMaker() {
             if (rbToyota.Checked)
-                return CarReport.MakerGroup.トヨタ;
+                return MakerGroup.トヨタ;
             if (rbNissan.Checked)
-                return CarReport.MakerGroup.日産;
+                return MakerGroup.日産;
             if (rbHonda.Checked)
-                return CarReport.MakerGroup.ホンダ;
+                return MakerGroup.ホンダ;
             if (rbSubaru.Checked)
-                return CarReport.MakerGroup.スバル;
+                return MakerGroup.スバル;
             if (rbImport.Checked)
-                return CarReport.MakerGroup.輸入車;
+                return MakerGroup.輸入車;
 
-            return CarReport.MakerGroup.その他;
+            return MakerGroup.その他;
         }
 
         private void dgvRecord_Click(object sender, EventArgs e) {
-            if (dgvRecord.CurrentRow == null) return;
-
+            if (dgvRecord.CurrentRow is null) return;
 
             dtpDate.Value = (DateTime)dgvRecord.CurrentRow.Cells["Date"].Value;
             cbAuthor.Text = (string)dgvRecord.CurrentRow.Cells["Author"].Value;
@@ -122,52 +128,137 @@ namespace CarReportSystem {
         private void btNewRecord_Click(object sender, EventArgs e) {
             InputItemsAllClear();
         }
+
         //修正ボタンのイベントハンドラ
         private void btRecordModify_Click(object sender, EventArgs e) {
-            //if ((dgvRecord.CurrentRow == null)
+            //if ((dgvRecord.CurrentRow is null)
             //    || (!dgvRecord.CurrentRow.Selected)) return;
 
+            if (dgvRecord.Rows.Count == 0) return;
 
-            if (dgvRecord.CurrentRow.Index == 0) return;
-
-            listCarReports[dgvRecord.CurrentRow.Index].Auther = cbAuthor.Text;
+            listCarReports[dgvRecord.CurrentRow.Index].Date = dtpDate.Value;
+            listCarReports[dgvRecord.CurrentRow.Index].Author = cbAuthor.Text;
             listCarReports[dgvRecord.CurrentRow.Index].Maker = getRadioButtonMaker();
             listCarReports[dgvRecord.CurrentRow.Index].CarName = cbCarName.Text;
             listCarReports[dgvRecord.CurrentRow.Index].Report = tbReport.Text;
             listCarReports[dgvRecord.CurrentRow.Index].Picture = pbPicture.Image;
 
-            dgvRecord.Refresh(); //データグリッドビューの更新
+            dgvRecord.Refresh();    //データグリッドビューの更新
         }
+
         //削除ボタンのイベントハンドラ
         private void btRecordDelete_Click(object sender, EventArgs e) {
-            if ((dgvRecord.CurrentRow == null)
+            //選択されていない場合は処理を行わない
+            if ((dgvRecord.CurrentRow is null)
                 || (!dgvRecord.CurrentRow.Selected)) return;
 
-            //カーレポート管理用リストから、該当するデータを削除する
+            //選択されているインデックスを取得
             int index = dgvRecord.CurrentRow.Index;
             //削除したいインデックスを指定してリストから削除
             listCarReports.RemoveAt(index);
         }
 
-        private void Form1_Load(object sender, EventArgs e) {           
+        private void Form1_Load(object sender, EventArgs e) {
             InputItemsAllClear();
-            dgvRecord.AlternatingRowsDefaultCellStyle.BackColor = Color.Blue;
+
+            //交互に色を設定（データグリッドビュー）
+            dgvRecord.DefaultCellStyle.BackColor = Color.LightGray;
+            dgvRecord.AlternatingRowsDefaultCellStyle.BackColor = Color.WhiteSmoke;
+
+            //設定ファイルを読み込み背景色を設定する（逆シリアル化）
+            //P286以降を参考にする（ファイル名：setting.xml）
+
+
+
         }
 
         private void tsmiExit_Click(object sender, EventArgs e) {
             Application.Exit();
         }
 
+        //このアプリについてを選択した時のイベントハンドラ
         private void tsmiAbout_Click(object sender, EventArgs e) {
             fmVersion fmv = new fmVersion();
             fmv.ShowDialog();
         }
 
-        private void tsmiChangeColor_Click(object sender, EventArgs e) {
-            ColorDialog cd = new ColorDialog();
-            if(cd.ShowDialog() == DialogResult.OK) {
-                this.BackColor = cd.Color;
+        private void 色設定ToolStripMenuItem_Click(object sender, EventArgs e) {
+
+            if (cdColor.ShowDialog() == DialogResult.OK) {
+                BackColor = cdColor.Color;
+                //設定ファイルへ保存
+                settings.MainFormBackColor = cdColor.Color.ToArgb();    //背景色を設定インスタンスへ設定
+
             }
+        }
+
+        //ファイルオープン処理
+        private void reportOpenFile() {
+            if (ofdReportFileOpen.ShowDialog() == DialogResult.OK) {
+                try {
+                    //逆シリアル化でバイナリ形式を取り込む
+#pragma warning disable SYSLIB0011 // 型またはメンバーが旧型式です
+                    var bf = new BinaryFormatter();
+#pragma warning restore SYSLIB0011 // 型またはメンバーが旧型式です
+                    using (FileStream fs = File.Open(
+                        ofdReportFileOpen.FileName, FileMode.Open, FileAccess.Read)) {
+
+                        listCarReports = (BindingList<CarReport>)bf.Deserialize(fs);
+                        dgvRecord.DataSource = listCarReports;
+
+                        cbAuthor.Items.Clear();
+                        cbCarName.Items.Clear();
+                        //コンボボックスに登録
+                        foreach (var report in listCarReports) {
+                            setCbAuthor(report.Author);
+                            setCbCarName(report.CarName);
+                        }
+                    }
+                }
+                catch (Exception) {
+                    tsslbMessage.Text = "ファイル形式が違います";
+                }
+            }
+        }
+
+        //ファイルセーブ処理
+        private void reportSaveFile() {
+            if (sfdReportFileSave.ShowDialog() == DialogResult.OK) {
+                try {
+                    //バイナリ形式でシリアル化
+#pragma warning disable SYSLIB0011
+                    var bf = new BinaryFormatter();
+#pragma warning restore SYSLIB0011
+
+                    using (FileStream fs = File.Open(
+                                    sfdReportFileSave.FileName, FileMode.Create)) {
+
+                        bf.Serialize(fs, listCarReports);
+                    }
+                }
+                catch (Exception ex) {
+                    tsslbMessage.Text = "ファイル書き出しエラー";
+                    MessageBox.Show(ex.Message);//←より具体的なエラーを出力
+                }
+            }
+        }
+
+        private void 保存ToolStripMenuItem_Click(object sender, EventArgs e) {
+            reportSaveFile(); //ファイルセーブ処理
+        }
+
+        private void 開くToolStripMenuItem_Click(object sender, EventArgs e) {
+            reportOpenFile(); //ファイルオープン処理
+        }
+
+        //フォームが閉じたら呼ばれる
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
+            //設定ファイルへ色情報を保存する処理（シリアル化）
+            //P284以降を参考にする（ファイル名：setting.xml）
+
+
+
+
         }
     }
 }
