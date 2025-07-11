@@ -10,7 +10,7 @@ namespace CarReportSystem {
         BindingList<CarReport> listCarReports = new BindingList<CarReport>();
 
         //設定クラスのインスタンスを生成
-        Settings settings = new Settings();
+        Settings settings = Settings.getInstance();
 
         public Form1() {
             InitializeComponent();
@@ -262,12 +262,16 @@ namespace CarReportSystem {
         private void Form1_FormClosed(object sender, FormClosedEventArgs e) {
             //設定ファイルへ色情報を保存する処理（シリアル化）
             //P284以降を参考にする（ファイル名：setting.xml）
-           {
+           try{
             var serializer = new XmlSerializer(typeof(Settings));
             using (var writer = new StreamWriter("setting.xml")) {
                 serializer.Serialize(writer, settings);
             }
         }
+            catch(Exception ex) {
+                tsslbMessage.Text = "設定ファイル書き出しエラー";
+                MessageBox.Show(ex.Message);//
+            }
 
 
 
