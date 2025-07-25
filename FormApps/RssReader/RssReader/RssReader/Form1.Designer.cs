@@ -63,7 +63,7 @@
             // wvRssLink
             // 
             wvRssLink.AllowExternalDrop = true;
-            wvRssLink.BackColor = Color.PaleGreen;
+            wvRssLink.BackColor = Color.GhostWhite;
             wvRssLink.CreationProperties = null;
             wvRssLink.DefaultBackgroundColor = Color.White;
             wvRssLink.Location = new Point(12, 251);
@@ -145,7 +145,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.ForestGreen;
+            BackColor = SystemColors.InactiveBorder;
             ClientSize = new Size(842, 728);
             Controls.Add(btDelete);
             Controls.Add(cbUrl);

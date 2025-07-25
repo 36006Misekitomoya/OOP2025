@@ -10,6 +10,7 @@ namespace RssReader {
         public Form1() {
             InitializeComponent();
 
+
           
             cbUrl.DisplayMember = "Key";
             cbUrl.ValueMember = "Value";
@@ -29,28 +30,66 @@ namespace RssReader {
             btDelete.Click += tbDelete_Click;
         }
 
+        // フォームクラスのフィールドとして rssUrlDict を定義
+        private Dictionary<string, string> rssUrlDict = new Dictionary<string, string>
+        {
+    { "国内", "https://news.yahoo.co.jp/rss/categories/domestic.xml" },
+    { "国際", "https://news.yahoo.co.jp/rss/categories/world.xml" },
+    { "経済", "https://news.yahoo.co.jp/rss/categories/business.xml" },
+    { "エンタメ", "https://news.yahoo.co.jp/rss/categories/entertainment.xml" },
+    { "スポーツ", "https://news.yahoo.co.jp/rss/categories/sports.xml" },
+    { "IT", "https://news.yahoo.co.jp/rss/categories/it.xml" },
+    { "科学", "https://news.yahoo.co.jp/rss/categories/science.xml" },
+    { "ライフ", "https://news.yahoo.co.jp/rss/categories/life.xml" },
+    { "地域", "https://news.yahoo.co.jp/rss/categories/local.xml" }
+};
+
         private async void btRssGet_Click_1(object sender, EventArgs e) {
-            using (var hc = new HttpClient()) {
-                var selected = (KeyValuePair<string, string>)cbUrl.SelectedItem;
-                string xml = await hc.GetStringAsync(selected.Value);
-                XDocument xdoc = XDocument.Parse(xml);
+            try {
+                using (var hc = new HttpClient()) {
+                    // コンボボックスで選択されたアイテムを取得
+                    var selected = (KeyValuePair<string, string>)cbUrl.SelectedItem;
 
-                //var url = hc.OpenRead(tbUrl.Text);
-                //XDocument xdoc = XDocument.Load(url); //RSSの取得
+                    // getRssUrl メソッドに選択されたキーを渡して、対応するURLを取得
+                    string rssUrl = getRssUrl(selected.Key);
+                    if (string.IsNullOrEmpty(rssUrl)) {
+                        MessageBox.Show("URLが見つかりません。");
+                        return;
+                    }
 
-                //RSSを解析して必要な要素を取得
-                items = xdoc.Root.Descendants("item")
-                    .Select(x => new ItemData {
-                        Title = (string?)x.Element("title"),
-                        Link = (string?)x.Element("link")
-                    }).ToList();
+                    // RSSのXMLを取得
+                    string xml = await hc.GetStringAsync(rssUrl);
+                    XDocument xdoc = XDocument.Parse(xml);
 
-                //リストボックスへタイトルを表示
-                lbTitles.Items.Clear();
-                items.ForEach(item => lbTitles.Items.Add(item.Title ?? "データなし"));
+                    // RSSを解析して必要な要素を取得
+                    items = xdoc.Root.Descendants("item")
+                        .Select(x => new ItemData {
+                            Title = (string?)x.Element("title"),
+                            Link = (string?)x.Element("link")
+                        }).ToList();
 
+                    // リストボックスへタイトルを表示
+                    lbTitles.Items.Clear();
+                    items.ForEach(item => lbTitles.Items.Add(item.Title ?? "データなし"));
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"エラーが発生しました: {ex.Message}");
             }
         }
+
+        private string getRssUrl(string key) {
+            // もし、辞書にキーが存在すれば、対応するURLを返す
+            if (rssUrlDict.ContainsKey(key)) {
+                return rssUrlDict[key];
+            }
+            return null; // 辞書にキーが無ければ null を返す
+        }
+
+
+
+
+
 
         private void lbTitles_Click(object sender, EventArgs e) {
 
