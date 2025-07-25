@@ -30,7 +30,7 @@ namespace RssReader {
             btDelete.Click += tbDelete_Click;
         }
 
-        // フォームクラスのフィールドとして rssUrlDict を定義
+        // フォームクラスのフィールドとして rssUrlDict を定義　
         private Dictionary<string, string> rssUrlDict = new Dictionary<string, string>
         {
     { "国内", "https://news.yahoo.co.jp/rss/categories/domestic.xml" },
