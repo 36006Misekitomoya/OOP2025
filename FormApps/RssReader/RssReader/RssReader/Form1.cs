@@ -26,7 +26,7 @@ namespace RssReader {
             cbUrl.Items.Add(new KeyValuePair<string, string>("地域", "https://news.yahoo.co.jp/rss/categories/local.xml"));                        
 
             // イベント登録
-            btRegistration.Click += btRegistration_Click;
+            btRegistration.Click += btRegistration_Click;　
             btDelete.Click += tbDelete_Click;
         }
 
