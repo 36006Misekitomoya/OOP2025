@@ -48,8 +48,9 @@ namespace RssReader {
             try {
                 using (var hc = new HttpClient()) {
                     // コンボボックスで選択されたアイテムを取得
-                    var selected = (KeyValuePair<string, string>)cbUrl.SelectedItem;
-
+                    
+                        var selected = (KeyValuePair<string, string>)cbUrl.SelectedItem;
+                    
                     // getRssUrl メソッドに選択されたキーを渡して、対応するURLを取得
                     string rssUrl = getRssUrl(selected.Key);
                     if (string.IsNullOrEmpty(rssUrl)) {

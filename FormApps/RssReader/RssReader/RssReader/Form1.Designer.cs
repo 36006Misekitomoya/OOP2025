@@ -65,8 +65,8 @@
             wvRssLink.AllowExternalDrop = true;
             wvRssLink.BackColor = Color.GhostWhite;
             wvRssLink.CreationProperties = null;
-            wvRssLink.DefaultBackgroundColor = Color.White;
-            wvRssLink.Location = new Point(12, 251);
+            wvRssLink.DefaultBackgroundColor = Color.Tomato;
+            wvRssLink.Location = new Point(12, 252);
             wvRssLink.Name = "wvRssLink";
             wvRssLink.Size = new Size(799, 447);
             wvRssLink.TabIndex = 3;
@@ -145,7 +145,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.InactiveBorder;
+            BackColor = Color.GreenYellow;
             ClientSize = new Size(842, 728);
             Controls.Add(btDelete);
             Controls.Add(cbUrl);
