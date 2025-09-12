@@ -37,7 +37,7 @@
             <TextBox x:Name="bValue" Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" FontSize="20" TextAlignment="Right"
                      Text="{Binding ElementName=bSlider, Path=Value, UpdateSourceTrigger=PropertyChanged}"/>
 
-            <ComboBox x:Name="ComboBox" ItemsSource="{Binding}" SelectedValuePath="Color" Margin="0,16,0,0" Height="24" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="155" Grid.Column="1" Grid.Row="3" SelectionChanged="ComboBox_SelectionChanged">
+            <ComboBox x:Name="ComboBox" ItemsSource="{Binding}" SelectedValuePath="Color" Margin="0,16,0,0" Height="24" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Center" Width="155" Grid.ColumnSpan="3" Grid.Row="3" SelectionChanged="ComboBox_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
