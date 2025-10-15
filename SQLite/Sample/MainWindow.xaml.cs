@@ -1,6 +1,7 @@
 ﻿
 using Sample.Data;
 using SQLite;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -17,16 +18,20 @@ namespace Sample {
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        private List<Person> _persons = new List<Person>();
+        private ObservableCollection<Person> _persons = new ObservableCollection<Person>();
 
         public MainWindow() {
             InitializeComponent();
-
-            _persons.Add(new Person { Id = 10, Name = "aaa", Phone = "1234" });
-            _persons.Add(new Person { Id = 11, Name = "bbb", Phone = "1235" });
-            _persons.Add(new Person { Id = 12, Name = "ccc", Phone = "1236" });
-
+            //ReadDatabase();
+            _persons.Add(new Person { Id = 1, Name = "aaaaa", Phone = "12345" });
             PersonListView.ItemsSource = _persons;
+        }
+
+        private void ReadDatabase() {
+            using (var connection = new SQLiteConnection(App.databasePath)) {
+                connection.CreateTable<Person>();
+                //_persons = connection.Table<Person>().ToList();
+            }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e) {
@@ -41,11 +46,9 @@ namespace Sample {
             }
         }
         private void ReadButton_Click(object sender, RoutedEventArgs e) {
-            
-            using (var connection = new SQLiteConnection(App.databasePath)) {
-                connection.CreateTable<Person>();
-                var persons = connection.Table<Person>().ToList();
-            }
+
+            _persons.Add(new Person { Id = 1, Name = "aaaaa", Phone = "12345" });
+            //ReadDatabase();
 
         }
     }

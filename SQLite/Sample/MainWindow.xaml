@@ -12,7 +12,17 @@
             <TextBox x:Name="PhoneTextBox"/>
             <Button Content="保存" x:Name="SaveButton" Click="SaveButton_Click"/>
             <Button Content="取得" x:Name="ReadButton" Click="ReadButton_Click"/>
-            <ListView x:Name="PersonListView" Margin="0,5,0,0"/>
+            <ListView x:Name="PersonListView" Margin="0,5,0,0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Id}" FontSize="15"/>
+                            <TextBlock Text="{Binding Name}" FontSize="15"/>
+                            <TextBlock Text="{Binding Phone}" Foreground="Blue"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
     </Grid>
 </Window>
