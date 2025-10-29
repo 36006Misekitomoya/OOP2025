@@ -1,4 +1,6 @@
 ﻿
+using System.Security.Cryptography.X509Certificates;
+
 namespace Exercise01 {
     internal class Program {
         static void Main(string[] args) {
@@ -21,34 +23,84 @@ namespace Exercise01 {
 
         private static void Exercise1_2() {
             var book = Library.Books
-                .Where(b => b.PublishedYear >= 2021)
-                .MinBy(b => b.Price);
-            Console.WriteLine(book);
-            Console.WriteLine();
+                .MaxBy(b => b.Price);                
+            Console.WriteLine(book);            
         }
 
         private static void Exercise1_3() {
-            var book = Library.Books
-                .Select(b => b.PublishedYear)
-                .OrderByDescending(g => g.Key);
+            var results = Library.Books
+                .GroupBy(b => b.PublishedYear)
+                .OrderBy(b => b.Key)
+                .Select(b => new {
+                    PublishedYear = b.Key,
+                    Count = b.Count(),
+                });
 
+            foreach(var item in results) {
+                Console.WriteLine($"{item.PublishedYear} : {item.Count}");
+            }                
         }
 
         private static void Exercise1_4() {
-            
+            //p299参照
+            var books = Library.Books
+                .OrderByDescending(b => b.PublishedYear)
+                .ThenByDescending(b => b.Price);
+
+            foreach(var item in books) {
+                Console.WriteLine($"{item.PublishedYear}年:{item.Price}円{item.Title}");
+            }
+                
         }
 
-        private static void Exercise1_5() {
-            
+        private static void Exercise1_5() {            
+            var c2022 = Library.Books
+                .Join(Library.Categories, book => book.CategoryId, category => category.Id,
+                    (book, category) => new { book.PublishedYear, Category = category.Name })
+                .Where(b => b.PublishedYear == 2022)
+                .Select(b => b.Category)
+                .Distinct();
+
+            Console.WriteLine("2022年に発行された書籍のカテゴリ一覧：");
+            foreach (var category in c2022) {
+                Console.WriteLine(category);
+            }
         }
+
 
         private static void Exercise1_6() {
-            
+            var booksByCategory = Library.Books
+                .Join(Library.Categories, book => book.CategoryId,
+                    category => category.Id,
+                    (book, category) => new { book.Title, Category = category.Name, book.PublishedYear })
+                .GroupBy(b => b.Category)
+                .OrderBy(g => g.Key);
+
+            foreach (var group in booksByCategory) {
+                Console.WriteLine($" # {group.Key}");
+                foreach (var book in group) {
+                    Console.WriteLine($"   {book.Title}");
+                }
+            }
         }
 
         private static void Exercise1_7() {
-            
-        }
+            var devBooksByYear = Library.Books
+                .Join(Library.Categories,
+                    book => book.CategoryId,
+                    category => category.Id,
+                    (book, category) => new { book.Title, book.PublishedYear, Category = category.Name })
+                .Where(b => b.Category == "Development")
+                .GroupBy(b => b.PublishedYear)
+                .OrderBy(g => g.Key);
+
+            foreach (var group in devBooksByYear) {
+                Console.WriteLine($"{group.Key}年");
+                foreach (var book in group) {
+                    Console.WriteLine($"    {book.Title}");
+                }
+            }
+        }                    
 
         private static void Exercise1_8() {
             
