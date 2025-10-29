@@ -1,10 +1,10 @@
 ﻿namespace Section01 {
     internal class Program {
         static void Main(string[] args) {
-            var books = Library.Books
-                 .Join(Library.Categories
-                        , book => book.CategoryId
-                        , Category => Category.Id,
+            var groups = Library.Categories
+                 .GroupJoin(Library.Books
+                        , c => c.Id
+                        , b => b.CategoryId,
                         (book, category) => new {
                             book.Title,
                             Category = category.Name,
