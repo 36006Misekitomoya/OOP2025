@@ -5,11 +5,18 @@
                  .GroupJoin(Library.Books
                         , c => c.Id
                         , b => b.CategoryId,
-                        (book, category) => new {
-                            book.Title,
-                            Category = category.Name,
-                            book.PublishedYear
+                        (c, books) => new {                            
+                            Category = c.Name,
+                            Books = books,
                         });
+
+            //出力処理して終わり
+            foreach(var group in groups) {
+                Console.WriteLine(group.Category);
+                foreach(var book in group.Books) {
+                    Console.WriteLine($"{book.Title} ({book.PublishedYear})年");
+                }
+            }
         }
     }
 }
