@@ -12,7 +12,6 @@ class Exercise01{
             return;
         }
 
-        // File.ReadLines は1行ずつ遅延読み込み
         var lines = File.ReadLines(filePath);
 
         int count = 0;
