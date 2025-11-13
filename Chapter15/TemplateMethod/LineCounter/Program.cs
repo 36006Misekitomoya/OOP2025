@@ -5,18 +5,19 @@ using TextFileProcessor;
 namespace LineCounter {
     internal class Program {
         static void Main(string[] args) {
-            // ファイルパスをユーザーに入力させる
             Console.Write("検索するファイルのパスを入力してください: ");
-            string filePath = Console.ReadLine()?.Trim() ?? "";
+            string filePath = Console.ReadLine()?.Trim().Trim('"') ?? ""; // ← 余分な空白・引用符を除去
 
-            // ファイルが存在するか確認
+            // カレントディレクトリ表示（デバッグ用）
+            Console.WriteLine($"現在の作業ディレクトリ: {Directory.GetCurrentDirectory()}");
+
             while (!File.Exists(filePath)) {
-                Console.WriteLine("❌ ファイルが見つかりません。もう一度入力してください。");
-                Console.Write("検索するファイルのパスを入力してください: ");
-                filePath = Console.ReadLine()?.Trim() ?? "";
+                Console.WriteLine($"❌ ファイルが見つかりません: {filePath}");
+                Console.Write("もう一度ファイルパスを入力してください: ");
+                filePath = Console.ReadLine()?.Trim().Trim('"') ?? "";
             }
 
-            // 指定されたファイルで処理を実行
+            Console.WriteLine($"✅ ファイルが見つかりました: {filePath}");
             TextProcessor.Run<LineCounterProcessor>(filePath);
         }
     }
