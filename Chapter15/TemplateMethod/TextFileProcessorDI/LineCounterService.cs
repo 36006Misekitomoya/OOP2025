@@ -12,7 +12,7 @@ namespace TextFileProcessorDI {
         }
 
 
-        public void Excute(string line) {
+        public void Execute(string line) {
             _count++;
         }
 
