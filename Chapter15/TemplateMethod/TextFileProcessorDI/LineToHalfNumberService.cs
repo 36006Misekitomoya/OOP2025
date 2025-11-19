@@ -28,7 +28,7 @@ namespace TextFileProcessorDI {
         //                if (c >= '０' && c <= '９') {
         //                    return (char)(c - 0xFEE0);
         //                }
-        //                return c;
+        //                return c
         //            }
 
         //            char[] chars = text.ToCharArray();
