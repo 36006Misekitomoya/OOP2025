@@ -7,13 +7,17 @@ using System.Threading.Tasks;
 namespace TextFileProcessorDI {
     //問題15.1
     internal class LineToHalfNumberService : ITextFileService {
-        private int _count;
+        private static Dictionary<char,char> _dictionary =
+        new Dictionary<char,char>(){
+            {'０','0'},{'１','1'},{'２','2'},{'３','3'},{'４','4'},
+            {'５','5'},{'６','6'},{'７','7'},{'８','8'},{'９','9'},
+            };
 
         public void Initialize(string fname) {
         }
 
         public void Execute(string line) {
-            Console.WriteLine(line.Normalize(NormalizationForm.FormKD));
+        //    Console.WriteLine(line.Normalize(NormalizationForm.FormKD));
         }
 
         public void Terminate() {
@@ -28,7 +32,7 @@ namespace TextFileProcessorDI {
         //                if (c >= '０' && c <= '９') {
         //                    return (char)(c - 0xFEE0);
         //                }
-        //                return c
+        //                return c;
         //            }
 
         //            char[] chars = text.ToCharArray();
