@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace TextFileProcessorDI {
@@ -18,6 +19,8 @@ namespace TextFileProcessorDI {
 
         public void Execute(string line) {
         //    Console.WriteLine(line.Normalize(NormalizationForm.FormKD));
+
+        
         }
 
         public void Terminate() {
