@@ -79,6 +79,40 @@ namespace WeatherApp {
             }
         }
 
+
+        private string GetNearestCity(double lat, double lon) {
+            string nearest = null;
+            double minDistance = double.MaxValue;
+
+            foreach (var kvp in cityCoords) {
+                var cityLat = kvp.Value.lat;
+                var cityLon = kvp.Value.lon;
+
+                double distance = GetDistance(lat, lon, cityLat, cityLon);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    nearest = kvp.Key;
+                }
+            }
+            return nearest;
+        }
+
+        // 緯度経度から距離を計算（ハーサイン距離）
+        private double GetDistance(double lat1, double lon1, double lat2, double lon2) {
+            double R = 6371; // 地球半径 km
+            double dLat = ToRad(lat2 - lat1);
+            double dLon = ToRad(lon2 - lon1);
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(ToRad(lat1)) * Math.Cos(ToRad(lat2)) *
+                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return R * c;
+        }
+
+        private double ToRad(double angle) {
+            return angle * Math.PI / 180;
+        }
+
         // 天気取得
         private async void GetWeatherButton_Click(object sender, RoutedEventArgs e) {
             string city = CityInput.Text.Trim();
@@ -110,6 +144,53 @@ namespace WeatherApp {
                 MessageBox.Show($"天気情報取得中にエラーが発生しました:\n{ex.Message}");
             }
         }
+        private async void GetCurrentLocationWeatherButton_Click(object sender, RoutedEventArgs e) {
+            try {
+                using (var http = new HttpClient()) {
+                    // IPベースで現在地取得
+                    string url = "http://ip-api.com/json/";
+                    string json = await http.GetStringAsync(url);
+                    var location = JsonConvert.DeserializeObject<IpLocation>(json);
+
+                    if (location.Status == "success") {
+                        double lat = location.Lat;
+                        double lon = location.Lon;
+
+                        // 都道府県を自動判定
+                        string nearestCity = GetNearestCity(lat, lon);
+                        CityInput.Text = nearestCity;
+                        CityInput.Foreground = Brushes.Black;
+
+                        // 天気取得
+                        string weatherUrl = $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true";
+                        string weatherJson = await http.GetStringAsync(weatherUrl);
+                        var response = JsonConvert.DeserializeObject<WeatherResponse>(weatherJson);
+
+                        if (response?.current_weather != null) {
+                            var w = response.current_weather;
+                            TemperatureText.Text = $"{w.temperature}°C";
+                            WindText.Text = $"風速: {w.windspeed} m/s";
+                            DescriptionText.Text = $"更新: {w.time}";
+                            WeatherIcon.Text = GetWeatherIcon(w.weathercode);
+                        }
+                    } else {
+                        MessageBox.Show("現在地の取得に失敗しました。");
+                    }
+                }
+            }
+            catch (Exception ex) {
+                MessageBox.Show($"現在地の天気取得中にエラーが発生しました:\n{ex.Message}");
+            }
+        }
+
+
+        // IP位置情報用クラス
+        public class IpLocation {
+            public string Status { get; set; }
+            public double Lat { get; set; }
+            public double Lon { get; set; }
+        }
+
 
         private string GetWeatherIcon(int code)
 {

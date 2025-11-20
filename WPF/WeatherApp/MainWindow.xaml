@@ -32,6 +32,11 @@
                         Click="GetWeatherButton_Click" Background="#FF29B6F6"
                         Foreground="White" FontWeight="Bold"/>
 
+                <Button Content="現在地の天気" Width="150" Height="32" Margin="0,10"
+        Click="GetCurrentLocationWeatherButton_Click"
+        Background="#FF66BB6A" Foreground="White" FontWeight="Bold"/>
+
+
                 <!-- 天気アイコン -->
                 <TextBlock x:Name="WeatherIcon" 
            FontSize="64" 
