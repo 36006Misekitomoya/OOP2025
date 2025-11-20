@@ -1,20 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
 namespace WeatherApp {
-    public class CurrentWeather {
-        public double temperature { get; set; }
-        public double windspeed { get; set; }
-        public string time { get; set; }
-        public double humidity { get; set; }
-    }
-
-    
-
     public class Program {
+        // 都市座標の辞書
         static readonly Dictionary<string, (double lat, double lon)> cityCoords = new() {
             {"北海道", (43.06417, 141.34694)}, {"青森", (40.82444, 140.74)}, {"岩手", (39.70361, 141.1525)},
             {"宮城", (38.26889, 140.87194)}, {"秋田", (39.71861, 140.1025)}, {"山形", (38.24056, 140.36333)},
@@ -45,18 +36,18 @@ namespace WeatherApp {
                 return;
             }
 
-            var url = $"https://api.open-meteo.com/v1/forecast?latitude={coords.lat}&longitude={coords.lon}&current_weather=true&hourly=relativehumidity_2m";
-
+            // URLの修正
+            var url = $"https://api.open-meteo.com/v1/forecast?latitude={coords.lat}&longitude={coords.lon}&current_weather=true&hourly=temperature_2m,wind_speed_10m,relativehumidity_2m";
 
             try {
                 using var http = new HttpClient();
                 var weather = await http.GetFromJsonAsync<WeatherResponse>(url);
 
-                if (weather?.current != null) {
-                    Console.WriteLine($"取得時刻：{weather.current.time}");
-                    Console.WriteLine($"気温：{weather.current.temperature_2m} ℃");
-                    Console.WriteLine($"風速：{weather.current.wind_speed_10m} m/s");
-                    Console.WriteLine($"湿度：{weather.current.humidity_2m} ％");
+                if (weather?.current_weather != null) {
+                    Console.WriteLine($"取得時刻：{weather.current_weather.time}");
+                    Console.WriteLine($"気温：{weather.current_weather.temperature_2m} ℃");
+                    Console.WriteLine($"風速：{weather.current_weather.wind_speed_10m} m/s");
+                    Console.WriteLine($"湿度：{weather.current_weather.humidity_2m} ％");
                 } else {
                     Console.WriteLine("データが取得できませんでした。");
                 }
