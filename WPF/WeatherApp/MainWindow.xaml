@@ -1,61 +1,108 @@
-﻿<Window x:Class="WeatherApp.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="お天気アプリ" Width="400" Height="600"
-        WindowStartupLocation="CenterScreen">
+﻿<Window x:Class="TenkiApp.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="TenkiApp" Width="1200" Height="700" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <!-- ウィンドウ全体のグラデーションを青と白に変更 -->
+        <LinearGradientBrush x:Key="AppBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#ADD8E6" Offset="0"/>
+            <!-- 淡い青 -->
+            <GradientStop Color="#FFFFFF" Offset="1"/>
+            <!-- 白 -->
+        </LinearGradientBrush>
+        <!-- 左メニューのグラデーションを青と白に変更 -->
+        <LinearGradientBrush x:Key="MenuBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#ADD8E6" Offset="0"/>
+            <!-- 淡い青 -->
+            <GradientStop Color="#FFFFFF" Offset="1"/>
+            <!-- 白 -->
+        </LinearGradientBrush>
+        <!-- ボタン用青と白のグラデーション -->
+        <LinearGradientBrush x:Key="ButtonBlueWhite" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#A6C8FF" Offset="0"/>
+            <!-- 淡い青 -->
+            <GradientStop Color="#E0F4FF" Offset="1"/>
+            <!-- 薄い白 -->
+        </LinearGradientBrush>
+        <!-- パネル背景を青と白に変更 -->
+        <LinearGradientBrush x:Key="PanelBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#B0E0E6" Offset="0"/>
+            <!-- 霧のような青 -->
+            <GradientStop Color="#FFFFFF" Offset="1"/>
+            <!-- 白 -->
+        </LinearGradientBrush>
+    </Window.Resources>
 
-    <Grid>
-        <!-- 背景グラデーション -->
-        <Grid.Background>
-            <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                <GradientStop Color="#FFB3E5FC" Offset="0"/>
-                <GradientStop Color="#FFFFFFFF" Offset="1"/>
-            </LinearGradientBrush>
-        </Grid.Background>
-
-        <!-- 天気カード -->
-        <Border Background="White" CornerRadius="20" Padding="20" Margin="20"
-                VerticalAlignment="Center" HorizontalAlignment="Center" 
-                Effect="{DynamicResource DropShadowEffect}">
-            <StackPanel HorizontalAlignment="Center">
-
-                <TextBlock Text="お天気アプリ" FontSize="28" FontWeight="Bold"
-                           Foreground="#333333" HorizontalAlignment="Center" Margin="0,10"/>
-
-                <!-- 都道府県入力 -->
-                <TextBox x:Name="CityInput" Width="220" Height="32" FontSize="16"
-                         HorizontalAlignment="Center" Margin="0,10"
-                         Text="都市名を入力" Foreground="Gray"
-                         GotFocus="CityInput_GotFocus" LostFocus="CityInput_LostFocus"/>
-
-                <Button Content="天気を取得" Width="150" Height="32" Margin="0,10"
-                        Click="GetWeatherButton_Click" Background="#FF29B6F6"
-                        Foreground="White" FontWeight="Bold"/>
-
-                <Button Content="現在地の天気" Width="150" Height="32" Margin="0,10"
-        Click="GetCurrentLocationWeatherButton_Click"
-        Background="#FF66BB6A" Foreground="White" FontWeight="Bold"/>
-
-
-                <!-- 天気アイコン -->
-                <TextBlock x:Name="WeatherIcon" 
-           FontSize="64" 
-           HorizontalAlignment="Center" 
-           Margin="0,10"
-           TextAlignment="Center"/>
-
-                <!-- 気温 -->
-                <TextBlock x:Name="TemperatureText" FontSize="48" FontWeight="Bold"
-                           Foreground="#333333" HorizontalAlignment="Center" Margin="0,5"/>
-
-                <!-- 更新時刻 -->
-                <TextBlock x:Name="DescriptionText" FontSize="16" Foreground="#666666"
-                           HorizontalAlignment="Center" Margin="0,5"/>
-
-                <!-- 風速 -->
-                <TextBlock x:Name="WindText" FontSize="16" Foreground="#666666"
-                           HorizontalAlignment="Center" Margin="0,5"/>
+    <Grid Background="{StaticResource AppBackground}" Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="280"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <!-- 左メニュー -->
+        <Border Grid.Column="0" Background="{StaticResource MenuBackground}" Padding="20" CornerRadius="15">
+            <StackPanel>
+                <TextBlock FontSize="28" FontWeight="Bold" Foreground="#1E2A47"><Run Language="ja-jp" Text="お天気アプリ"/></TextBlock>
+                <TextBlock Text="地域を選択" Foreground="#1E2A47" Margin="0 0 0 5"/>
+                <ComboBox x:Name="PrefCombo" SelectionChanged="PrefCombo_SelectionChanged" FontSize="16" Background="#FAF0FC" Foreground="#1E2A47" BorderThickness="0" Padding="5" Margin="0 0 0 20" DisplayMemberPath="Name"/>
+                <Button Content="更新" Height="50" Click="Refresh_Click" Foreground="#1E2A47" FontWeight="Bold" Margin="0 0 0 20" BorderThickness="0" Background="{StaticResource ButtonBlueWhite}"/>
+                <Button Content="📍 現在地" Width="242" Height="26" Click="OnLocateClick" RenderTransformOrigin="0.5,0.5">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform AngleX="3.066"/>
+                            <RotateTransform/>
+                            <TranslateTransform X="0.696"/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                </Button>
+                <TextBlock x:Name="StatusText" Foreground="#1E2A47" Margin="0 20 0 20"/>
+                <!-- 左メニューのパネル -->
+                <Border Background="#E0F8FF" CornerRadius="12" Padding="15" Margin="0 0 0 15" BorderBrush="#B0E0E6" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="今日のサマリー" FontSize="18" FontWeight="Bold" Foreground="#1E2A47" Margin="0 0 0 10"/>
+                        <TextBlock x:Name="MiniWeatherIcon" FontSize="40" HorizontalAlignment="Center" Margin="0 0 0 10"/>
+                        <TextBlock x:Name="MiniTempText" FontSize="20" Foreground="#1E2A47" HorizontalAlignment="Center"/>
+                        <StackPanel Margin="0 10 0 0">
+                            <TextBlock x:Name="MiniHumidityText" Foreground="#1E2A47"/>
+                            <TextBlock x:Name="MiniWindText" Foreground="#1E2A47"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+                <Border Background="#D1ECFF" CornerRadius="12" Padding="15" BorderBrush="#A3D1F7" BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="ひとこと" FontSize="18" FontWeight="Bold" Foreground="#1E2A47" Margin="0 0 0 10"/>
+                        <TextBlock x:Name="AdviceText" Text="読み込み中…" Foreground="#1E2A47" TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </Border>
+        <!-- 右メイン -->
+        <Grid Grid.Column="1" Margin="30 0 0 0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="220"/>
+            </Grid.RowDefinitions>
+            <!-- 現在の天気 -->
+            <Border Grid.Row="0" Background="{StaticResource PanelBackground}" CornerRadius="20" Padding="20" Margin="0 0 0 15">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock x:Name="WeatherIcon" FontSize="48" Margin="0 0 20 0"/>
+                    <StackPanel>
+                        <TextBlock x:Name="AreaTitle" FontSize="28" FontWeight="Bold" Foreground="#1E2A47" Margin="0 0 0 5"/>
+                        <TextBlock x:Name="TimeText" Foreground="#1E2A47" FontSize="20"/>
+                        <TextBlock x:Name="TempText" Foreground="#1E2A47" FontSize="20"/>
+                        <TextBlock x:Name="WindText" Foreground="#1E2A47" FontSize="20"/>
+                        <TextBlock x:Name="WindDirText" Foreground="#1E2A47" FontSize="20"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+            <!-- グラフ -->
+            <Border Grid.Row="1" Background="{StaticResource PanelBackground}" CornerRadius="20" Padding="10" Margin="0 0 0 15">
+                <Canvas x:Name="GraphCanvas"/>
+            </Border>
+            <!-- 週間予報 -->
+            <Border Grid.Row="2" Background="{StaticResource PanelBackground}" CornerRadius="20" Padding="10">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <WrapPanel x:Name="WeeklyPanel" Orientation="Horizontal" HorizontalAlignment="Center" />
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

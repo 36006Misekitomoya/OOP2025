@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Map</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <style>
+        #map { height: 100%; }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script>
+        // Leaflet地図の設定
+        var map = L.map('map').setView([51.505, -0.09], 2); // デフォルトは緯度51.505、経度-0.09（ロンドン周辺）
+
+        // OpenStreetMapタイルを使用
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // 地図クリックイベントを処理
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lon = e.latlng.lng;
+
+            // JavaScriptからC#に緯度経度を渡す
+            window.external.getWeatherData(lat, lon);
+
+            // 地図にピンを追加
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup("緯度: " + lat + "<br>経度: " + lon)
+                .openPopup();
+        });
+    </script>
+</body>
+</html>
